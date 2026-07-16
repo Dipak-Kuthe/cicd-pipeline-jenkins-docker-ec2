@@ -19,18 +19,19 @@ it as a Docker image, and deploys the container to an Amazon EC2 host.
 
 ## Pipeline Flow
 
+```mermaid
+flowchart LR
+    DEV[Developer] -->|git push| GH[GitHub]
+    GH -->|webhook| JEN[Jenkins Pipeline]
+    JEN --> B[Build]
+    B --> T[Test]
+    T --> D[Docker Build]
+    D --> R[(Docker Registry)]
+    R --> DEP[Deploy to EC2]
+    DEP --> APP[Container :5000 - Flask + Gunicorn]
 ```
-  Developer                GitHub              Jenkins                 EC2
-     |  git push  ---------->  |                  |                     |
-     |                         |  webhook ------>  |                     |
-     |                         |                  | 1. Checkout          |
-     |                         |                  | 2. Build             |
-     |                         |                  | 3. Test              |
-     |                         |                  | 4. docker build      |
-     |                         |                  | 5. docker push       |
-     |                         |                  | 6. ssh deploy ----->  | docker run
-     |                         |                  |                     |  (app live)
-```
+
+> Full diagram details: [ARCHITECTURE.md](ARCHITECTURE.md)
 
 ---
 
